@@ -10,6 +10,7 @@ import {
 } from "react-leaflet";
 
 import { initFirebase, initFirestore } from "../common/firebaseHelpers";
+import MapWidget from "./MapWidget";
 
 import "leaflet/dist/leaflet.css";
 import "./Map.css";
@@ -73,6 +74,25 @@ class JourneyMap extends Component {
         <Tooltip>{new Date(loc.timestamp).toString()}</Tooltip>
       </CircleMarker>
     ));
+    const renderLocation = loc => (
+      <span>
+        timestamp: {loc.timestamp}
+        <br />
+        latitude: {loc.coords.latitude}
+        <br />
+        longitude: {loc.coords.longitude}
+        <br />
+        accuracy: {loc.coords.accuracy}
+        <br />
+        altitude: {loc.coords.altitude}
+        <br />
+        altitudeAccuracy: {loc.coords.altitudeAccuracy}
+        <br />
+        heading: {loc.coords.heading}
+        <br />
+        speed: {loc.coords.speed}
+      </span>
+    );
     return (
       <div className="JourneyMap-container">
         <LeafletMap className="JourneyMap" center={position} zoom={zoom}>
@@ -85,6 +105,25 @@ class JourneyMap extends Component {
           </Marker>
           <React.Fragment>{locationMarkers}</React.Fragment>
         </LeafletMap>
+        <MapWidget>
+          <h3>Location statistics:</h3>
+          {locationsLoading ? <p>Loading...</p> : null}
+          <p>
+            <b>Logged locations:</b> {locations.length}
+          </p>
+          <p>
+            <b>Oldest data point:</b>
+            <br />
+            {locations.length > 0 ? renderLocation(locations[0]) : null}
+          </p>
+          <p>
+            <b>Latest data point:</b>
+            <br />
+            {locations.length > 0
+              ? renderLocation(locations[locations.length - 1])
+              : null}
+          </p>
+        </MapWidget>
       </div>
     );
   }
