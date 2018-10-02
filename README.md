@@ -2,7 +2,7 @@
 
 This is the React <abbr title="Single-Page Application">SPA</abbr> web frontend for Travel Visualization service.
 
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app), which bundles together React, Webpack, Babel, Jest and others without manual configuration. For more documentation about the built-in features, see [User Guide](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), which bundles together React, Webpack, Babel, Jest and others without manual configuration. For more documentation about the built-in features, see [User Guide](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
 
 ## Getting started
