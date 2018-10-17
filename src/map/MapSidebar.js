@@ -1,4 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
+
+import { LocationsPropType } from "./mapPropTypes";
 
 import "./Map.css";
 
@@ -88,5 +91,10 @@ const MapSidebar = props => (
     </p>
   </div>
 );
+
+MapSidebar.propTypes = {
+  locations: LocationsPropType.isRequired,
+  locationsLoading: PropTypes.bool
+};
 
 export default MapSidebar;

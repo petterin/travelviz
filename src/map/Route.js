@@ -1,6 +1,8 @@
 import React from "react";
 import { CircleMarker, Polyline, Tooltip } from "react-leaflet";
 
+import { LocationsPropType } from "./mapPropTypes";
+
 const drawRouteEndMarker = loc => (
   <CircleMarker center={[loc.latitude, loc.longitude]} key={loc.timestamp}>
     <Tooltip>{new Date(loc.timestamp).toUTCString()}</Tooltip>
@@ -38,5 +40,9 @@ const drawRoute = locations =>
 const Route = props => (
   <React.Fragment>{drawRoute(props.locations)}</React.Fragment>
 );
+
+Route.propTypes = {
+  locations: LocationsPropType.isRequired
+};
 
 export default Route;
