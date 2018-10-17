@@ -4,6 +4,7 @@ import {
   CircleMarker,
   Map as LeafletMap,
   Marker,
+  Polyline,
   Popup,
   TileLayer,
   Tooltip
@@ -14,7 +15,7 @@ import MapWidget from "./MapWidget";
 
 import "leaflet/dist/leaflet.css";
 import "./Map.css";
-import mockLocations from "./mock-locations.json";
+import mockLocations from "../data/garmin_locations";
 
 import marker from "leaflet/dist/images/marker-icon.png";
 import marker2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -40,7 +41,7 @@ class JourneyMap extends Component {
 
   componentDidMount() {
     // Set location data from temporary source:
-    this.setState({ locations: mockLocations.locations });
+    this.setState({ locations: mockLocations });
 
     // (Following is commented out because this version would
     // consume Firebase's daily free quota very fast!)
@@ -66,33 +67,37 @@ class JourneyMap extends Component {
   render() {
     const { locations, locationsLoading, zoom } = this.state;
     const position = [this.state.lat, this.state.lng];
-    const locationMarkers = locations.map(loc => (
-      <CircleMarker
-        center={[loc.coords.latitude, loc.coords.longitude]}
-        key={loc.timestamp}
-      >
-        <Tooltip>{new Date(loc.timestamp).toString()}</Tooltip>
-      </CircleMarker>
-    ));
-    const renderLocation = loc => (
-      <span>
-        timestamp: {loc.timestamp}
-        <br />
-        latitude: {loc.coords.latitude}
-        <br />
-        longitude: {loc.coords.longitude}
-        <br />
-        accuracy: {loc.coords.accuracy}
-        <br />
-        altitude: {loc.coords.altitude}
-        <br />
-        altitudeAccuracy: {loc.coords.altitudeAccuracy}
-        <br />
-        heading: {loc.coords.heading}
-        <br />
-        speed: {loc.coords.speed}
-      </span>
-    );
+
+    const locationMarkers = locations.reduce((result, locationBatch) => {
+      const realLocations = locationBatch.filter(
+        loc => loc.latitude && loc.longitude
+      );
+      if (realLocations.length < 1) {
+        return result;
+      }
+      const drawCircleMarker = loc => (
+        <CircleMarker
+          center={[loc.latitude, loc.longitude]}
+          key={loc.timestamp}
+        >
+          <Tooltip>{new Date(loc.timestamp).toUTCString()}</Tooltip>
+        </CircleMarker>
+      );
+      const drawPath = locations => (
+        <Polyline
+          positions={locations.map(loc => [loc.latitude, loc.longitude])}
+        />
+      );
+      const markers = (
+        <React.Fragment key={realLocations[0].timestamp}>
+          {drawCircleMarker(realLocations[0])}
+          {drawPath(realLocations)}
+          {drawCircleMarker(realLocations[realLocations.length - 1])}
+        </React.Fragment>
+      );
+      return result.concat(markers);
+    }, []);
+
     return (
       <div className="JourneyMap-container">
         <LeafletMap className="JourneyMap" center={position} zoom={zoom}>
@@ -100,28 +105,92 @@ class JourneyMap extends Component {
             attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
+          {/*
           <Marker position={position}>
             <Popup>This is an example popup.</Popup>
           </Marker>
+          */}
           <React.Fragment>{locationMarkers}</React.Fragment>
         </LeafletMap>
         <MapWidget>
-          <h3>Location statistics:</h3>
+          <h3>Journey statistics:</h3>
           {locationsLoading ? <p>Loading...</p> : null}
           <p>
-            <b>Logged locations:</b> {locations.length}
+            <b>Logged location points:</b>
+            <br />
+            {locations.reduce((sum, locs) => (sum += locs.length), 0)}
           </p>
           <p>
-            <b>Oldest data point:</b>
+            <b>Travelled distance:</b>
             <br />
-            {locations.length > 0 ? renderLocation(locations[0]) : null}
+            {Math.round(
+              locations.reduce(
+                (sum, locs) =>
+                  (sum += locs.reduce(
+                    (biggest, loc) => Math.max(biggest, loc.sumDistance),
+                    0
+                  )),
+                0
+              ) / 1000
+            )}
+            {"\xa0"}
+            km
+          </p>
+          <p>
+            <b>Top speed:</b>
+            <br />
+            {3.6 *
+              locations.reduce(
+                (max1, locs) =>
+                  Math.max(
+                    max1,
+                    locs.reduce(
+                      (max2, loc) =>
+                        Math.max(max2, new Date(loc.speed).getTime()),
+                      0
+                    )
+                  ),
+                0
+              )}{" "}
+            km/h
+          </p>
+          <p>
+            <b>Days on bicycle:</b>
+            <br />
+            {
+              locations.reduce((dateSet, locs) => {
+                const d = new Date(locs[0].timestamp);
+                return dateSet.add(
+                  Date.UTC(
+                    d.getFullYear(),
+                    d.getMonth(),
+                    d.getDate(),
+                    0,
+                    0,
+                    0,
+                    0
+                  )
+                );
+              }, new Set()).size
+            }
           </p>
           <p>
             <b>Latest data point:</b>
             <br />
-            {locations.length > 0
-              ? renderLocation(locations[locations.length - 1])
-              : null}
+            {new Date(
+              locations.reduce(
+                (max1, locs) =>
+                  Math.max(
+                    max1,
+                    locs.reduce(
+                      (max2, loc) =>
+                        Math.max(max2, new Date(loc.timestamp).getTime()),
+                      0
+                    )
+                  ),
+                0
+              )
+            ).toUTCString()}
           </p>
         </MapWidget>
       </div>
