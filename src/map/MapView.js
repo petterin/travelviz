@@ -8,7 +8,6 @@ import Route from "./Route";
 
 import "leaflet/dist/leaflet.css";
 import "./Map.css";
-import mockLocations from "../data/garmin_locations";
 
 import marker from "leaflet/dist/images/marker-icon.png";
 import marker2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -34,8 +33,16 @@ class MapView extends Component {
   };
 
   componentDidMount() {
+    this.setState({ locationsLoading: true });
+
     // Set location data from temporary source:
-    this.setState({ locations: mockLocations });
+    import("../data/garmin_locations")
+      .then(module => {
+        this.setState({ locations: module.default, locationsLoading: false });
+      })
+      .catch(err => {
+        console.log("Could not load mock locations.", err);
+      });
 
     // (Following is commented out because this version would
     // consume Firebase's daily free quota very fast!)
@@ -43,7 +50,6 @@ class MapView extends Component {
     const firebase = initFirebase();
     const db = initFirestore(firebase);
 
-    this.setState({ locationsLoading: true });
     db.collection("locations")
       .get()
       .then(snapshot => {
