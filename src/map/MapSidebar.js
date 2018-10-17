@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { LocationsPropType } from "./mapPropTypes";
 
-import "./Map.css";
+import "./Map.scss";
 
 const calculateLocationPoints = locations =>
   locations.reduce((sum, locs) => (sum += locs.length), 0);

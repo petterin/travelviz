@@ -7,7 +7,7 @@ import MapSidebar from "./MapSidebar";
 import Route from "./Route";
 
 import "leaflet/dist/leaflet.css";
-import "./Map.css";
+import "./Map.scss";
 
 import marker from "leaflet/dist/images/marker-icon.png";
 import marker2x from "leaflet/dist/images/marker-icon-2x.png";
