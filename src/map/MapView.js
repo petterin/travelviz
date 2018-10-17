@@ -30,7 +30,7 @@ Leaflet.Icon.Default.mergeOptions({
   shadowUrl: markerShadow
 });
 
-class JourneyMap extends Component {
+class MapView extends Component {
   state = {
     lat: 60.1869,
     lng: 24.8215,
@@ -99,7 +99,7 @@ class JourneyMap extends Component {
     }, []);
 
     return (
-      <div className="JourneyMap-container">
+      <div className="MapView">
         <LeafletMap className="JourneyMap" center={position} zoom={zoom}>
           <TileLayer
             attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
@@ -198,4 +198,4 @@ class JourneyMap extends Component {
   }
 }
 
-export default JourneyMap;
+export default MapView;
