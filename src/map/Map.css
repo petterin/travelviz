@@ -6,7 +6,7 @@
   width: 100%;
 }
 
-.MapWidget {
+.MapSidebar {
   background-color: white;
   background-clip: padding-box;
   border: 2px solid rgba(0,0,0,0.2);
@@ -21,7 +21,7 @@
   z-index: 1000;
 }
 
-.MapWidget h3 {
+.MapSidebar h3 {
   font-size: 110%;
   margin: 0;
   padding-bottom: 0.5em;

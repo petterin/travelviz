@@ -11,7 +11,7 @@ import {
 } from "react-leaflet";
 
 import { initFirebase, initFirestore } from "../common/firebaseHelpers";
-import MapWidget from "./MapWidget";
+import MapSidebar from "./MapSidebar";
 
 import "leaflet/dist/leaflet.css";
 import "./Map.css";
@@ -112,87 +112,7 @@ class MapView extends Component {
           */}
           <React.Fragment>{locationMarkers}</React.Fragment>
         </LeafletMap>
-        <MapWidget>
-          <h3>Journey statistics:</h3>
-          {locationsLoading ? <p>Loading...</p> : null}
-          <p>
-            <b>Logged location points:</b>
-            <br />
-            {locations.reduce((sum, locs) => (sum += locs.length), 0)}
-          </p>
-          <p>
-            <b>Travelled distance:</b>
-            <br />
-            {Math.round(
-              locations.reduce(
-                (sum, locs) =>
-                  (sum += locs.reduce(
-                    (biggest, loc) => Math.max(biggest, loc.sumDistance),
-                    0
-                  )),
-                0
-              ) / 1000
-            )}
-            {"\xa0"}
-            km
-          </p>
-          <p>
-            <b>Top speed:</b>
-            <br />
-            {3.6 *
-              locations.reduce(
-                (max1, locs) =>
-                  Math.max(
-                    max1,
-                    locs.reduce(
-                      (max2, loc) =>
-                        Math.max(max2, new Date(loc.speed).getTime()),
-                      0
-                    )
-                  ),
-                0
-              )}{" "}
-            km/h
-          </p>
-          <p>
-            <b>Days on bicycle:</b>
-            <br />
-            {
-              locations.reduce((dateSet, locs) => {
-                const d = new Date(locs[0].timestamp);
-                return dateSet.add(
-                  Date.UTC(
-                    d.getFullYear(),
-                    d.getMonth(),
-                    d.getDate(),
-                    0,
-                    0,
-                    0,
-                    0
-                  )
-                );
-              }, new Set()).size
-            }
-          </p>
-          <p>
-            <b>Latest data point:</b>
-            <br />
-            {new Date(
-              locations.reduce(
-                (max1, locs) =>
-                  Math.max(
-                    max1,
-                    locs.reduce(
-                      (max2, loc) =>
-                        Math.max(max2, new Date(loc.timestamp).getTime()),
-                      0
-                    )
-                  ),
-                0
-              )
-            ).toUTCString()}
-          </p>
-        </MapWidget>
+        <MapSidebar locations={locations} locationsLoading={locationsLoading} />
       </div>
     );
   }
