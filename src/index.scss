@@ -1,9 +1,15 @@
+// Google Fonts: Lato (regular, bold), Roboto (regular, bold)
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700|Roboto:400,700");
+
+@import "common/_variables.scss";
+
 * {
   box-sizing: border-box;
 }
 
 body {
-  font-family: sans-serif;
+  color: $text-color;
+  font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -13,4 +19,9 @@ body {
   height: 100%;
   overflow: hidden;
   width: 100%;
+}
+
+h1, h2, h3 {
+  color: $text-color;
+  font-family: "Lato", sans-serif;
 }

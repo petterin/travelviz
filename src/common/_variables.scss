@@ -1,0 +1,14 @@
+/* ------ PROJECT STYLE VARIABLES ------ */
+
+/* Coolors Exported Palette - coolors.co/11151c-31425e-9eb9bc-9e5562-f24e2e */
+$color1: rgba(17, 21, 28, 1); // eerie black
+$color2: rgba(49, 66, 94, 1); // charcoal
+$color3: rgba(158, 185, 188, 1); // cambridge blue
+$color4: rgba(158, 85, 98, 1); // rose dust
+$color5: rgba(242, 78, 46, 1); // carmine pink
+
+$text-color: $color1;
+
+$sidebar-background-color: transparentize($color1, 0.2);
+$sidebar-text-color: #ccc;
+$sidebar-text-alternate-color: $color3;

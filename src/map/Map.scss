@@ -1,3 +1,5 @@
+@import "../common/_variables.scss";
+
 .JourneyMap {
   height: 100%;
   left: 0;
@@ -7,10 +9,11 @@
 }
 
 .MapSidebar {
-  background-color: white;
+  background-color: $sidebar-background-color;
   background-clip: padding-box;
-  border: 2px solid rgba(0,0,0,0.2);
+  border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px;
+  color: $sidebar-text-alternate-color;
   max-height: 92vh;
   max-width: 33vw;
   overflow-y: auto;
@@ -19,10 +22,15 @@
   right: 4vh;
   top: 4vh;
   z-index: 1000;
-}
 
-.MapSidebar h3 {
-  font-size: 110%;
-  margin: 0;
-  padding-bottom: 0.5em;
+  h3 {
+    color: $sidebar-text-color;
+    font-size: 110%;
+    margin: 0;
+    padding-bottom: 0.5em;  
+  }
+
+  b {
+    color: $sidebar-text-color;
+  }
 }
