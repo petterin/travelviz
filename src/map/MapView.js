@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Leaflet from "leaflet";
 import { Map as LeafletMap, Marker, TileLayer, Popup } from "react-leaflet";
 
@@ -65,6 +66,7 @@ class MapView extends Component {
   }
 
   render() {
+    console.log("MapView userId:", this.props.match.params.userId);
     const { locations, locationsLoading, zoom } = this.state;
     const position = [this.state.lat, this.state.lng];
     return (
@@ -84,5 +86,13 @@ class MapView extends Component {
     );
   }
 }
+
+MapView.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      userId: PropTypes.string.isRequired
+    })
+  }).isRequired
+};
 
 export default MapView;

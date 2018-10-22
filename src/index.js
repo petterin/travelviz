@@ -1,11 +1,30 @@
-import 'react-app-polyfill/ie11'; // For IE 11 support
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.scss';
-import MapView from './map/MapView';
-import * as serviceWorker from './serviceWorker';
+import "react-app-polyfill/ie11"; // For IE 11 support
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-ReactDOM.render(<MapView />, document.getElementById('root'));
+import "./index.scss";
+import Home from "./frontpage/Home";
+import MapView from "./map/MapView";
+import * as serviceWorker from "./serviceWorker";
+
+const NotFound = ({ location }) => (
+  <div>
+    No match for <code>{location.pathname}</code>.
+  </div>
+);
+
+const app = (
+  <Router>
+    <Switch>
+      <Route path="/" exact component={Home} />
+      <Route path="/user/:userId" component={MapView} />
+      <Route component={NotFound} />
+    </Switch>
+  </Router>
+);
+
+ReactDOM.render(app, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
