@@ -3,7 +3,7 @@ export default {
 	initialViewState: {
 	  longitude: -122.41669,
 	  latitude: 37.7853,
-	  zoom: 13,
+	  zoom: 7,
 	  pitch: 0,
 	  bearing: 0
 	}	

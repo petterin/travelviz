@@ -10,12 +10,13 @@ const data = garminData
 	// .slice(0, 100)
 	.map((p, num, arr) => ({
 		elevation: p.elevation,
+		speed: p.speed,
 		sourcePosition: [p.longitude, p.latitude], 
 		targetPosition: arr[num+1] 
 			? [arr[num+1].longitude, arr[num+1].latitude]
 			: [p.longitude, p.latitude]
 	}))
-	.filter(p => p && p.sourcePosition && p.sourcePosition[0] && p.sourcePosition[1] && p.targetPosition[0] && p.targetPosition[1])
+	.filter(p => p && p.sourcePosition && p.sourcePosition[0] && p.sourcePosition[1] && p.targetPosition[0] && p.targetPosition[1] && p.speed)
 
 config.initialViewState.latitude = garminData[0][0].latitude
 config.initialViewState.longitude = garminData[0][0].longitude
@@ -29,8 +30,8 @@ class Map extends React.Component {
       	id: 'line-layer', 
       	data,
 				pickable: true,
-    		getStrokeWidth: 12, 
-    		getColor: d => [Math.sqrt(d.elevation), 140, 0, 255],     	
+    		getStrokeWidth: 3, 
+    		getColor: d => [10 * Math.sqrt(d.elevation), 100, 180, 255],     	
       }) 
     ];
 
@@ -39,7 +40,11 @@ class Map extends React.Component {
         initialViewState={config.initialViewState}
         controller={true}
         layers={layers}>
-        <StaticMap mapboxApiAccessToken={config.mapboxApiAccessToken} />
+        <StaticMap 
+        	reuseMaps 
+      		mapboxApiAccessToken={config.mapboxApiAccessToken} 
+        	preventStyleDiffing={true} 
+        	mapStyle="mapbox://styles/mapbox/light-v9" />
       </DeckGL>
     );
 	}
