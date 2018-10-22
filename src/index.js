@@ -6,13 +6,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./index.scss";
 import Home from "./frontpage/Home";
 import MapView from "./map/MapView";
+import NotFound from "./error/NotFound";
 import * as serviceWorker from "./serviceWorker";
-
-const NotFound = ({ location }) => (
-  <div>
-    No match for <code>{location.pathname}</code>.
-  </div>
-);
 
 const app = (
   <Router>
