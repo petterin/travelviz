@@ -4,6 +4,7 @@ import { Map as LeafletMap, Marker, TileLayer, Popup } from "react-leaflet";
 
 import { initFirebase, initFirestore } from "../common/firebaseHelpers";
 import MapSidebar from "./MapSidebar";
+import Map from "./Map";
 import Route from "./Route";
 
 import "leaflet/dist/leaflet.css";
@@ -27,7 +28,7 @@ class MapView extends Component {
   state = {
     lat: 60.1869,
     lng: 24.8215,
-    zoom: 3,
+    zoom: 7,
     locations: [],
     locationsLoading: false
   };
@@ -69,17 +70,8 @@ class MapView extends Component {
     const position = [this.state.lat, this.state.lng];
     return (
       <div className="MapView">
-        <LeafletMap className="JourneyMap" center={position} zoom={zoom}>
-          <TileLayer
-            attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <Route locations={locations} />
-          <Marker position={position}>
-            <Popup>This is an example popup.</Popup>
-          </Marker>
-        </LeafletMap>
         <MapSidebar locations={locations} locationsLoading={locationsLoading} />
+        <Map state={this.state} />
       </div>
     );
   }

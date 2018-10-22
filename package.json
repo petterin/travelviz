@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "deck.gl": "^6.2.0",
     "firebase": "^5.5.3",
     "leaflet": "^1.3.4",
     "node-sass": "^4.9.4",
@@ -11,6 +12,7 @@
     "react-app-polyfill": "^0.1.3",
     "react-dom": "^16.5.2",
     "react-leaflet": "^2.1.0",
+    "react-map-gl": "^3.3.7",
     "react-scripts": "2.0.4"
   },
   "scripts": {
