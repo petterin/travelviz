@@ -1,0 +1,28 @@
+@import "../common/_variables.scss";
+
+.Home {
+  background-color: #eee;
+  min-height: 100%;
+  overflow: hidden; // keeps padding from flowing out
+  padding: 40px;
+
+  &-title {
+    font-size: 1.5em;
+    margin-top: 0;
+  }
+
+  &-intro {
+    font-size: large;
+  }
+}
+.insta{
+  background-color: #eee;
+  min-height: 100%;
+  overflow: hidden; // keeps padding from flowing out
+  padding: 40px;
+
+  &-button {
+    font-size: 1.5em;
+    margin-top: 0;
+  }
+}

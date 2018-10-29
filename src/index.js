@@ -8,12 +8,14 @@ import "../node_modules/mapbox-gl/dist/mapbox-gl.css";
 import Home from "./frontpage/Home";
 import MapView from "./map/MapView";
 import NotFound from "./error/NotFound";
+import Settings from "./settings/Settings";
 import * as serviceWorker from "./serviceWorker";
 
 const app = (
   <Router>
     <Switch>
       <Route path="/" exact component={Home} />
+      <Route path ="/settings/" component={Settings} />
       <Route path="/user/:userId" component={MapView} />
       <Route component={NotFound} />
     </Switch>
