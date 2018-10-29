@@ -14,7 +14,7 @@ class Settings extends Component {
         </p>
         <h1 className="Home-title">Connect to Instagram</h1>
         <p className="Home-intro">Give permissions to use your Instagram content in your travel story.</p>
-        <a href="https://api.instagram.com/oauth/authorize/?client_id=84cde46c2dbe4eed8196a400ca7d6d09&redirect_uri=http://localhost:3000/settings/&response_type=token">
+        <a href="https://api.instagram.com/oauth/authorize/?client_id=84cde46c2dbe4eed8196a400ca7d6d09&redirect_uri=http://localhost:3000/settings/&response_type=token&scope=public_content">
           <button className="insta-button">Give Permission!</button>
         </a>
       </div>
