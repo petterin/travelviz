@@ -11,6 +11,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 * [Node.js](https://nodejs.org/) 8.x with npm 5.x (or later)
 
+### Dependencies
+- React UI library - [Ant Design](https://ant.design)
+Override default variables here: ./config-overrides.js
+List of the default variables can be checked [here](https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less)
+- Dynamic text - [Fittext](https://github.com/kennethormandy/react-fittext)
+
 ### Installing dependencies
 
 In project directory:

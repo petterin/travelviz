@@ -5,6 +5,9 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import "./index.scss";
 import "../node_modules/mapbox-gl/dist/mapbox-gl.css";
+
+import 'antd/lib/button/style/css'; 
+
 import Home from "./frontpage/Home";
 import MapView from "./map/MapView";
 import NotFound from "./error/NotFound";
