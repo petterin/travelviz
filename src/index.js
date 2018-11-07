@@ -12,6 +12,7 @@ import Home from "./frontpage/Home";
 import MapView from "./map/MapView";
 import NotFound from "./error/NotFound";
 import Settings from "./settings/Settings";
+import Images from "./settings/Images";
 import * as serviceWorker from "./serviceWorker";
 
 const app = (
@@ -19,6 +20,7 @@ const app = (
     <Switch>
       <Route path="/" exact component={Home} />
       <Route path ="/settings/" component={Settings} />
+      <Route path ="/images/" component={Images} />
       <Route path="/user/:userId" component={MapView} />
       <Route component={NotFound} />
     </Switch>
