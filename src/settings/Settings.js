@@ -5,6 +5,7 @@ import "./Settings.scss";
 import "../frontpage/Home.scss";
 
 class Settings extends Component {
+  // TODO: Instagram token handling to explicit and based on Firebase
   render() {
     return (
       <div className="Settings">

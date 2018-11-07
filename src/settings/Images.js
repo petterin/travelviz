@@ -1,68 +1,44 @@
 import React, { Component } from "react";
+import { Row, Col } from 'antd';
+import request from 'superagent';
 
 
 class Images extends React.Component {
-  state = {
-    response: '',
-    post: '',
-    responseToPost: '',
-  };
-
-  componentDidMount() {
-    this.callApi()
-      .then(res => this.setState({ response: res.express }))
-      .catch(err => console.log(err));
+  // TODO: Access token from Firebase
+  constructor(props) {
+    super(props);
+    this.state = {
+      photos: []
+    }
   }
 
-  callApi = async () => {
-    const response = await fetch('https://api.instagram.com/v1/users/self/media/recent/?access_token=8607033444.84cde46.b9bd2f87d48a4a2c8bcda7a415e0d8d2');
-    const body = await response.json();
+  componentDidMount() {
+    this.fetchPhotos();
+  }
 
-    if (response.status !== 200) throw Error(body.message);
-
-    return body;
-  };
-
-  handleSubmit = async e => {
-    e.preventDefault();
-    const response = await fetch('https://api.instagram.com/v1/users/self/media/recent/?access_token=8607033444.84cde46.b9bd2f87d48a4a2c8bcda7a415e0d8d2', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'Application/JSON',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-      },
-    });
-    const body = await response.text();
-
-    this.setState({ responseToPost: body });
-  };
+  fetchPhotos() {
+    request
+      .get('https://api.instagram.com/v1/users/self/media/recent/?access_token=8607033444.84cde46.b9bd2f87d48a4a2c8bcda7a415e0d8d2')
+      .then((res) => {
+        this.setState({
+          photos: res.body.data
+        })
+      })
+  }
 
 render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-        <p>{this.state.response}</p>
-        <form onSubmit={this.handleSubmit}>
-          <p>
-            <strong>Post to Server:</strong>
-          </p>
-          <button type="submit">Submit</button>
-        </form>
-        <p>{this.state.responseToPost}</p>
-      </div>
+      <Row gutter={16} className="Images">
+        {this.state.photos.map((photo) => {
+          return (
+            <Col span={8} key={photo.id} class={'location.' + photo.location.id}>
+              <a href={photo.link}>
+                <img src={photo.images.standard_resolution.url} alt={photo.caption}/>
+              </a>
+            </Col>
+          )
+        })}
+      </Row>
     );
   }
 }
