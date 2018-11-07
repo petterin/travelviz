@@ -25,7 +25,7 @@ In project directory:
 npm install
 ```
 
-### Running in development mode
+### Running UI in development mode
 
 ```
 npm start
@@ -42,6 +42,23 @@ npm test
 ```
 
 Launches the test runner in the interactive watch mode in terminal.
+
+### Running API in development mode
+
+**First time:**
+
+Run `npx firebase login` in project root, and login using the provided URL and your own Google account (which should be associated to the Firebase project).
+
+**Starting the server:**
+
+```
+cd functions
+npm run serve
+```
+
+JavaScript code for Firebase Cloud Functions is under `functions/` directory, which has its own `package.json` etc.
+
+NOTE: `firebase-tools` is installed as a npm devDependency for the main project, so you don't have to install it globally. Call it with `npx firebase <cmd>` in the project root (instead of `firebase <cmd>` used in the [Firebase documentation](https://firebase.google.com/docs/functions)).
 
 
 ## Deployment
