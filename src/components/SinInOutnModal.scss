@@ -1,0 +1,17 @@
+div[role='tabpanel']{
+  height: 500px;
+}
+div[role='tablist']{
+  text-align: center;
+  margin-top: -10px;
+}
+.ant-modal{
+  max-width: 520px;
+  margin: 10px auto;
+
+  .ant-form{
+    width: 60%;
+    margin: 40px auto;
+    min-width: 300px;
+  }
+}

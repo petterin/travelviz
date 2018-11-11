@@ -1,11 +1,29 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import { Button } from 'antd';
 import FitText from '@kennethormandy/react-fittext';
+import SignModal from "../components/SinInOutnModal"
 
 import "./Home.scss";
 
 class Home extends Component {
+  state = {
+    current: 'mail',
+    visible: false
+  }
+
+  handleClick = (e) => {
+    console.log('click ', e);
+    this.setState({
+      current: e.key,
+    });
+  }
+
+  toggleModal = () => {
+    this.setState({
+      visible: !this.state.visible,
+    });
+  }
+
   render() {
     return (
       <div className="Home">
@@ -15,7 +33,11 @@ class Home extends Component {
             <h6>Lorem ipsum tatatatt</h6>
           </React.Fragment>
         </FitText>
-        <Button type="primary" size="large" href="/user/demo">Check jorney map</Button>
+        <Button type="primary" size="large" href="/user/demo">Demo</Button>
+        <Button size="large" ghost onClick={this.toggleModal}>
+          Login
+        </Button>
+        <SignModal visible={this.state.visible} onClose={() => this.setState({ visible: false })} />
       </div>
     );
   }
