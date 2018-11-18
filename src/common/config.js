@@ -5,6 +5,14 @@ export default {
 	  latitude: 37.7853,
 	  zoom: 5,
 	  pitch: 0,
-	  bearing: 0
-	}	
+		bearing: 0,
+	},
+	tourTarget: {
+		km: 29000,
+		days: 730,
+		path: {
+			countries: ["Finland", "Estonia", "Latvia", "Lithuania", "Belarus", "Ukraine", "Moldova", "Romania", "Bulgaria", "Turkey", "Georgia", "Azerbaijan", "Kazakhstan", "Uzbekistan", "Kyrgyzstan", "China", "Australia", "New Zealand", "United States", "Portugal", "Spain", "France", "United Kingdom", "Belgium", "Netherlands", "Germany", "Denmark", "Sweden"],
+			done: 6
+		}
+	}
 }

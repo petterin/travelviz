@@ -4,9 +4,11 @@ import Leaflet from "leaflet";
 import { Map as LeafletMap, Marker, TileLayer, Popup } from "react-leaflet";
 
 import { initFirebase, initFirestore } from "../common/firebaseHelpers";
-import MapSidebar from "./MapSidebar";
+import MapTopbar from "./MapTopbar";
+import MapProgressLine from "./MapProgressLine";
 import Map from "./Map";
 import Route from "./Route";
+import { Layout } from 'antd';
 
 import "leaflet/dist/leaflet.css";
 import "./Map.scss";
@@ -14,6 +16,9 @@ import "./Map.scss";
 import marker from "leaflet/dist/images/marker-icon.png";
 import marker2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import config from "../common/config.js"
+
+const { Header, Content, Sider, Footer } = Layout;
 
 // Following workaround allows us to use Leaflet icons from npm with Webpack
 // (https://github.com/PaulLeCam/react-leaflet/issues/255)
@@ -24,7 +29,24 @@ Leaflet.Icon.Default.mergeOptions({
   shadowUrl: markerShadow
 });
 
+const calculateTotalDistance = locations => {
+  console.log("distance")
+  const totalDistance = locations.reduce(
+    (sum, locs) =>
+      (sum += locs.reduce(
+        (biggest, loc) => Math.max(biggest, loc.sumDistance),
+        0
+      )),
+    0
+  );
+  return Math.round(totalDistance / 1000.0); // convert to kilometers
+};
+const progressDistance = locations =>
+  Math.floor(100 * calculateTotalDistance(locations) / config.tourTarget.km)
+
 class MapView extends Component {
+  mapRef = React.createRef()
+
   // Initial map position and default empty values
   state = {
     lat: 60.1869,
@@ -34,6 +56,7 @@ class MapView extends Component {
     locationsLoading: false
   };
 
+  
   componentDidMount() {
     this.setState({ locationsLoading: true });
 
@@ -66,14 +89,18 @@ class MapView extends Component {
     */
   }
 
+  onCountryChange = (country) => {
+    this.mapRef.current.setLocation(country.latlng)
+  }
+
   render() {
-    console.log("MapView userId:", this.props.match.params.userId);
     const { locations, locationsLoading, zoom } = this.state;
-    const position = [this.state.lat, this.state.lng];
+    // const position = [this.state.lat, this.state.lng];
     return (
       <div className="MapView">
-        <MapSidebar locations={locations} locationsLoading={locationsLoading} />
-        <Map state={this.state} />
+        <MapTopbar locations={locations} locationsLoading={locationsLoading} />
+        <Map state={this.state} ref={this.mapRef} />
+        <MapProgressLine onChange={this.onCountryChange} distance={calculateTotalDistance(locations)} progress={progressDistance(locations)} />
       </div>
     );
   }

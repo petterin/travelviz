@@ -28,6 +28,10 @@ const correlationDays = locations =>
 //   return Math.round(totalDistance / 1000.0); // convert to kilometers
 // };
 
+{/* <Icon type="compass" /> */ }
+{/* <Progress type="circle" percent={props.progress} width={24} />
+{ props.distance } / {config.tourTarget.km} km</div > */}
+
 const calculateTopSpeed = locations => {
   const topSpeed = locations.reduce(
     (max1, locs) =>
@@ -90,8 +94,8 @@ const getLatestLocationTimestamp = locations => {
 const calculateTourDays = locations => {
   return Math.ceil((getLatestLocationTimestamp(locations) - getEarliestLocationTimestamp(locations)) / (24 * 3600 * 1000))
 }
-const MapSidebar = props => (
-  <div className="MapSidebar">
+const MapTopbar = props => (
+  <div className="MapTopbar">
     <h3>Journey statistics:</h3>
     {props.locationsLoading ? <p>Loading...</p> : null}
     <p>
@@ -125,9 +129,9 @@ const MapSidebar = props => (
   </div>
 );
 
-MapSidebar.propTypes = {
+MapTopbar.propTypes = {
   locations: LocationsPropType.isRequired,
   locationsLoading: PropTypes.bool
 };
 
-export default MapSidebar;
+export default MapTopbar;

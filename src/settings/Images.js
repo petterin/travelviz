@@ -31,7 +31,7 @@ render() {
       <Row gutter={16} className="Images">
         {this.state.photos.map((photo) => {
           return (
-            <Col span={8} key={photo.id} class={'location.' + photo.location.id}>
+            <Col span={8} key={photo.id} className={'location.' + photo.location.id}>
               <a href={photo.link}>
                 <img src={photo.images.standard_resolution.url} alt={photo.caption}/>
               </a>

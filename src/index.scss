@@ -24,3 +24,6 @@ body,
 h1, h2, h3, h6 {
   font-family: "Lato", sans-serif !important;
 }
+a.mapboxgl-ctrl-logo, .mapboxgl-ctrl-bottom-right{
+  display: none !important;
+}

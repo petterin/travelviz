@@ -36,6 +36,7 @@ import garmin_2972158235 from "./garmin_2972158235.json";
 import garmin_2969499683 from "./garmin_2969499683.json";
 import garmin_2969310247 from "./garmin_2969310247.json";
 
+
 const garminActivities = [
   garmin_3069518268,
   garmin_3069512763,
