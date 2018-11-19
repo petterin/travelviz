@@ -2,7 +2,7 @@ import React from "react";
 import { Popover, Steps, Icon, Progress } from 'antd';
 
 import "./Map.scss";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import countriesData from '../data/countries/countries.json'
 import config from "../common/config.js"
