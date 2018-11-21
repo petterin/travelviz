@@ -4,7 +4,7 @@ import {StaticMap} from 'react-map-gl';
 
 import config from "../common/config.js"
 import garminData from "../data/garmin_locations"
-import { Icon, Card } from 'antd';
+import { Icon, Card, Rate } from 'antd';
 
 import instaData from '../data/insta'
 import "../common/_variables.scss";
@@ -95,14 +95,17 @@ class Map extends React.Component {
 		const img = hoveredObject && hoveredObject.thumbnail_src ? <img src = { hoveredObject.thumbnail_src } /> : null;
 		return (
 			hoveredObject && (
-				<Card className="tooltip" style={{ left: x, top: y }} hoverable 
-					style={{ width: 240 }} 
-					cover={img} >
-					<Meta
-						title={hoveredObject.days}
-						description="www.instagram.com"
-				/>
-				</Card>
+				// <Card className="tooltip" style={{ left: x, top: y }} hoverable 
+				<div style={{ left: x, top: y, position: "absolute", zIndex: 1001 }}>
+					<Card className="tooltip" hoverable 
+						style={{ width: 240 }} 
+						cover={img} >
+						<Meta
+							title={hoveredObject.days}
+							description="www.instagram.com"/>
+						<Rate />
+					</Card>
+				</div>
 			)
 		);
 	}
@@ -116,7 +119,13 @@ class Map extends React.Component {
 		this.deckGlRef.current.deck.setProps({ viewState })
 		this.mapRef.current.getMap().panTo([latlng[1], latlng[0]], { duration: 1 })
 	}
+
+	onViewStateChange = () => {
+		this.setState({ hoveredObject: null })
+	}
+
 	render(){
+		const { enabledFilters } = this.props
 		const layers = [
       new LineLayer({
       	id: 'layer-path', 
@@ -127,77 +136,91 @@ class Map extends React.Component {
 				getColor: d => [16 * Math.sqrt(d.elevation), 100, 180, 255],  
 				// onHover: ({ object }) => setTooltip(`${object.day}`)   
 				// onHover: this._onHover	
-			}),
+			})
+		]
+		const homeLayers = [
 			new IconLayer({
 				id: 'layer-pointer',
 				data: points,
-				iconAtlas: '/assets/pin.png', //<Icon type="home" theme="filled" />,
+				iconAtlas: '/assets/pin_night.png', //<Icon type="home" theme="filled" />,
 				pickable: true,
 				iconMapping: {
 					marker: {
 						x: 0,
 						y: 0,
 						width: 128,
-						height: 128,
+						height: 160,
 						anchorY: 128,
 						mask: true
 					}
 				},
-				sizeScale: 15,
+				sizeScale: 12,
 				getPosition: d => d.sourcePosition,
 				getIcon: d => 'marker',
 				getSize: d => 5,
-				getColor: d => [48, 204, 95], //d => [Math.sqrt(d.days), 140, 0],
-			}),
-			new IconLayer({ // insta
-				id: 'layer-insta',
-				data: pics,
-				iconAtlas: '/assets/pin.png',
-				pickable: true,
-				iconMapping: {
-					marker: {
-						x: 0,
-						y: 0,
-						width: 128,
-						height: 128,
-						anchorY: 128,
-						mask: true
-					}
-				},
-				sizeScale: 15,
-				getPosition: d => [d.coords.longitude, d.coords.latitude],
-				getIcon: d => 'marker',
-				getSize: d => 5,
-				getColor: d => [48, 204, 95], //[Math.sqrt(d.days), 140, 0],
-				onClick: this._onIconClick
+				getColor: d => [48, 204, 95], //[200, 50 * Math.sqrt(d.days), 95], //[48, 204, 95], //
 			}),
 			new TextLayer({
 				id: 'layer-stops',
 				data: points,
 				pickable: true,
 				getPosition: d => d.sourcePosition,
-				getText: d => ''+d.days,
-				getSize: 32,
+				getText: d => '' + d.days,
+				getSize: 18,
 				getAngle: 0,
 				getTextAnchor: 'middle',
 				getAlignmentBaseline: 'center',
-				getPixelOffset: () => [0, -36]
+				getPixelOffset: () => [6, -24]
 				// onHover: ({ object }) => setTooltip(`${object.name}\n${object.address}`)
-			})			
-    ];
+			})]	
+		const instaLayers = [
+			new IconLayer({ // insta
+				id: 'layer-insta',
+				data: pics,
+				iconAtlas: '/assets/pin_insta.png',
+				pickable: true,
+				iconMapping: {
+					marker: {
+						x: 0,
+						y: 0,
+						width: 128,
+						height: 160,
+						anchorY: 128,
+						mask: true
+					}
+				},
+				sizeScale: 10,
+				getPosition: d => [d.coords.longitude, d.coords.latitude],
+				getIcon: d => 'marker',
+				getSize: d => 5,
+				// getColor: d => [48, 204, 95], //[Math.sqrt(d.days), 140, 0],
+				onClick: this._onIconClick
+			})
+		];
+
+		if (enabledFilters.includes('home')) {
+			homeLayers.map(layer => layers.push(layer))
+		}
+
+		if (enabledFilters.includes('instagram')) {
+			instaLayers.map(layer => layers.push(layer))
+		}
 
     return (
       <DeckGL
 				ref={this.deckGlRef}
 				initialViewState={config.initialViewState}
         controller={true}
-        layers={layers}>
+				layers={layers}
+				onViewStateChange={this.onViewStateChange}
+				>
 				<StaticMap 
 					ref={this.mapRef}
         	reuseMaps 
       		mapboxApiAccessToken={config.mapboxApiAccessToken} 
         	preventStyleDiffing={true} 
-        	mapStyle="mapbox://styles/mapbox/light-v9" />
+        	mapStyle="mapbox://styles/mapbox/light-v9" 
+					 />
 				{this.renderTooltip}
       </DeckGL>
     );

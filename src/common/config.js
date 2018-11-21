@@ -3,11 +3,13 @@ export default {
 	initialViewState: {
 	  longitude: -122.41669,
 	  latitude: 37.7853,
-	  zoom: 5,
+	  zoom: 7,
 	  pitch: 0,
 		bearing: 0,
 	},
-	tourTarget: {
+	tour: {
+		space: "teemu",
+		name: "Teemu", 
 		km: 29000,
 		days: 730,
 		path: {

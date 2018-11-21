@@ -23,4 +23,12 @@
   &-intro {
     font-size: large;
   }
+  .ant-btn{
+    min-width: 120px;
+    width: 10vw;
+    max-width: 200px;
+  }
+  .ant-btn + .ant-btn{
+    margin-left: 3vw;
+  }
 }

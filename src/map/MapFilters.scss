@@ -1,0 +1,20 @@
+@import "../common/_variables.scss";
+.MapFilters{
+  position: absolute;
+  right: 1vw;
+  top: 70px;
+  z-index: 1000;
+  .ant-btn{
+    border-color: black;
+    color: black;
+  }
+  .ant-btn:hover, .ant-btn:focus {
+    color: $primary-color;
+    background-color: transparent;
+    border-color: $primary-color;
+  }
+  .ant-btn-primary {
+    background-color: #30CC5F !important;
+    color: white !important;
+  }
+}
