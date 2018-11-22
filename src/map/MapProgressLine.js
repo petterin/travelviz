@@ -23,9 +23,7 @@ const countries = tourCountries.map(name => {
 const MapProgressLine = props => (
   <div className="MapProgressLine">
     <Steps current={countriesDone} progressDot direction="vertical" size="small" > 
-      {/* <Step title={<FontAwesomeIcon icon="stroopwaglobalfel"/>} />  */}
-      {countries.map((country, idx) => <Step key={idx} title={country.name} onClick={() => props.onChange(country)} />)}
-      {/* <Step title={<Icon type="global" />} ></Step> */}
+      {countries.map((country, idx) => <Step key={idx} title={country.name} description="" onClick={() => props.onChange(country)} />)}
     </Steps>
 
   </div>
