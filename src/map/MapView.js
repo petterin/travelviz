@@ -1,32 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Leaflet from "leaflet";
-import { Map as LeafletMap, Marker, TileLayer, Popup } from "react-leaflet";
 
-// import { initFirebase, initFirestore } from "../common/firebaseHelpers";
 import MapTopbar from "./MapTopbar";
 import MapFilters from "./MapFilters";
 import MapProgressLine from "./MapProgressLine";
 import Map from "./Map";
-import Route from "./Route";
 import SignModal from "../components/SinInOutnModal";
 
-import "leaflet/dist/leaflet.css";
 import "./Map.scss";
 
-import marker from "leaflet/dist/images/marker-icon.png";
-import marker2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import config from "../common/config.js"
-
-// Following workaround allows us to use Leaflet icons from npm with Webpack
-// (https://github.com/PaulLeCam/react-leaflet/issues/255)
-delete Leaflet.Icon.Default.prototype._getIconUrl;
-Leaflet.Icon.Default.mergeOptions({
-  iconRetinaUrl: marker2x,
-  iconUrl: marker,
-  shadowUrl: markerShadow
-});
 
 const logoSVG = () => (
   <svg width="20px" height="20px" viewBox="0 0 160 160" >
