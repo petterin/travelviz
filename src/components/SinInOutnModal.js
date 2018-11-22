@@ -41,7 +41,7 @@ class SinInOutnModal extends Component {
           <TabPane tab={<span><Icon type="user-add" />Sign up</span>} key={MODAL_KEYS["SIGN_UP"]}>
             <SignUpForm closeFn={this.closeModal} />
           </TabPane>
-          <TabPane tab={<span><Icon type="user" />Sign in</span>} key={MODAL_KEYS["SIGN_IN"]}>
+          <TabPane tab={<span><Icon type="login" />Sign in</span>} key={MODAL_KEYS["SIGN_IN"]}>
             <SignInForm closeFn={this.closeModal} />
           </TabPane>
         </Tabs>

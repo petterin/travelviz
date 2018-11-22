@@ -2,8 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { LocationsPropType } from "./mapPropTypes";
-import { Menu, Dropdown, Row, Col, Progress, Avatar, Icon } from 'antd';
+import { Row, Col, Progress, Avatar } from 'antd';
 
+import Navigation from "../common/Navigation";
 import "./Map.scss";
 import config from "../common/config.js"
 
@@ -95,19 +96,6 @@ const getLatestLocationTimestamp = locations => {
   );
   return new Date(latestTimestamp)
 };
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <a href="/"><Icon type="home" />Home</a>
-    </Menu.Item>
-    <Menu.Item>
-      <a href="/settings"><Icon type="setting" />Settings</a>
-    </Menu.Item>
-    <Menu.Item>      
-      <a href="/"><Icon type="info-circle" />About</a>
-    </Menu.Item>
-  </Menu>
-);
 
 const calculateTourDays = locations => {
   return Math.ceil((getLatestLocationTimestamp(locations) - getEarliestLocationTimestamp(locations)) / (24 * 3600 * 1000))
@@ -126,16 +114,15 @@ const MapTopbar = props => (
     </Col>
     <Col xs={0} sm={0} md={6} lg={7} xl={12}></Col>
     <Col xs={10} sm={4} md={2} lg={2} xl={1} className="right">
-      <Dropdown overlay={menu}>
-        <Icon type="pause" className="menu" />
-      </Dropdown>
+      <Navigation showModal={props.showModal} />
     </Col>
   </Row>
 );
 
 MapTopbar.propTypes = {
   locations: LocationsPropType.isRequired,
-  locationsLoading: PropTypes.bool
+  locationsLoading: PropTypes.bool,
+  showModal: PropTypes.func
 };
 
 export default MapTopbar;

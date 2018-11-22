@@ -9,7 +9,7 @@ import MapFilters from "./MapFilters";
 import MapProgressLine from "./MapProgressLine";
 import Map from "./Map";
 import Route from "./Route";
-import { Layout, Icon } from 'antd';
+import SignModal from "../components/SinInOutnModal";
 
 import "leaflet/dist/leaflet.css";
 import "./Map.scss";
@@ -18,8 +18,6 @@ import marker from "leaflet/dist/images/marker-icon.png";
 import marker2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import config from "../common/config.js"
-
-const { Header, Content, Sider, Footer } = Layout;
 
 // Following workaround allows us to use Leaflet icons from npm with Webpack
 // (https://github.com/PaulLeCam/react-leaflet/issues/255)
@@ -57,6 +55,8 @@ class MapView extends Component {
 
   // Initial map position and default empty values
   state = {
+    modalKey: null,
+    modalVisible: false,
     lat: 60.1869,
     lng: 24.8215,
     zoom: 7,
@@ -65,7 +65,13 @@ class MapView extends Component {
     filters: {}
   };
 
-  
+  showModal = key => {
+    this.setState({
+      modalKey: key,
+      modalVisible: true
+    });
+  };
+
   componentDidMount() {
     this.setState({ locationsLoading: true });
 
@@ -120,11 +126,16 @@ class MapView extends Component {
     const enabledFilters = Object.keys(filters).filter(key => filters[key])
     return (
       <div className="MapView">
-        <MapTopbar locations={locations} locationsLoading={locationsLoading} xs={0} sm={0} md={0} />
+        <MapTopbar locations={locations} locationsLoading={locationsLoading} xs={0} sm={0} md={0} showModal={this.showModal} />
         <Map state={this.state} ref={this.mapRef} enabledFilters={enabledFilters} />
         <MapProgressLine onChange={this.onCountryChange} distance={calculateTotalDistance(locations)} progress={progressDistance(locations)} />
         <a href="/" className="logo">SPUTNIK</a>
         <MapFilters filters={filters} onFilterChange={this.onFilterChange} onAllFilterChanged={this.onAllFilterChanged} />
+        <SignModal
+          visible={this.state.modalVisible}
+          activeKey={this.state.modalKey}
+          onClose={() => this.setState({ modalVisible: false })}
+        />
       </div>
     );
   }
