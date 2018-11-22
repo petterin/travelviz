@@ -43,10 +43,9 @@ class Home extends Component {
         <FitText compressor={2} minFontSize={24} maxFontSize={46}>
           <React.Fragment>
             <h2>
-              Welcome to <br />
-              Travel Visualization!
+              Welcome to Putnik!
             </h2>
-            <h6>Lorem ipsum tatatatt</h6>
+            <h6>Share your journey with the people, <br />who matter you the most!</h6>
           </React.Fragment>
         </FitText>
         <Link
