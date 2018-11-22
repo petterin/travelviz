@@ -7,27 +7,42 @@ import SignUpForm from "./SignUpForm";
 import "./SinInOutnModal.scss";
 
 const TabPane = Tabs.TabPane;
-function onTabChange(key) {
-  console.log(key);
+
+export const MODAL_KEYS = {
+  "SIGN_UP": "1",
+  "SIGN_IN": "2"
 }
 
 class SinInOutnModal extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { activeKey: props.activeKey };
+  }
+
+  onTabChange = activeKey => {
+    this.setState({ activeKey });
+  }
+
+  closeModal = () => {
+    this.setState({ activeKey: null });
+    this.props.onClose();
+  }
 
   render() {
-    const { visible, onClose } = this.props
+    const activeKey = this.state.activeKey || this.props.activeKey || MODAL_KEYS["SIGN_UP"];
     return (
       <Modal
-        visible={visible}
-        onOk={onClose}
+        visible={this.props.visible}
+        onOk={this.closeModal}
         wrapClassName='modal'
-        onCancel={onClose}
+        onCancel={this.closeModal}
         footer = {null}>
-        <Tabs defaultActiveKey="1" onChange={onTabChange}>
-          <TabPane tab={<span><Icon type="user" />Sign in</span>} key="1">
-            <SignInForm />
+        <Tabs onChange={this.onTabChange} activeKey={activeKey}>
+          <TabPane tab={<span><Icon type="user-add" />Sign up</span>} key={MODAL_KEYS["SIGN_UP"]}>
+            <SignUpForm closeFn={this.closeModal} />
           </TabPane>
-          <TabPane tab={<span><Icon type="user-add" />Sign up</span>} key="2">
-            <SignUpForm />
+          <TabPane tab={<span><Icon type="user" />Sign in</span>} key={MODAL_KEYS["SIGN_IN"]}>
+            <SignInForm closeFn={this.closeModal} />
           </TabPane>
         </Tabs>
       </Modal>

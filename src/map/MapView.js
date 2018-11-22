@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Leaflet from "leaflet";
 import { Map as LeafletMap, Marker, TileLayer, Popup } from "react-leaflet";
 
-import { initFirebase, initFirestore } from "../common/firebaseHelpers";
+// import { initFirebase, initFirestore } from "../common/firebaseHelpers";
 import MapTopbar from "./MapTopbar";
 import MapFilters from "./MapFilters";
 import MapProgressLine from "./MapProgressLine";

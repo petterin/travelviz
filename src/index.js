@@ -8,6 +8,8 @@ import "../node_modules/mapbox-gl/dist/mapbox-gl.css";
 
 import 'antd/lib/button/style/css'; 
 
+import { withAuthentication } from "./common/Authentication";
+import Firebase, { FirebaseContext } from "./common/Firebase";
 import Home from "./frontpage/Home";
 import MapView from "./map/MapView";
 import NotFound from "./error/NotFound";
@@ -15,7 +17,7 @@ import Settings from "./settings/Settings";
 import Images from "./settings/Images";
 import * as serviceWorker from "./serviceWorker";
 
-const app = (
+const App = () => (
   <Router>
     <Switch>
       <Route path="/" exact component={Home} />
@@ -27,7 +29,14 @@ const app = (
   </Router>
 );
 
-ReactDOM.render(app, document.getElementById("root"));
+const AuthenticatedApp = withAuthentication(App);
+const WrappedApp = () => (
+  <FirebaseContext.Provider value={new Firebase()}>
+    <AuthenticatedApp />
+  </FirebaseContext.Provider>
+);
+
+ReactDOM.render(<WrappedApp />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
