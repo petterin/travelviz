@@ -71,4 +71,12 @@ npm run build
 
 This correctly bundles React in production mode and optimizes the build for the best performance. The build is minified and the filenames include the hashes.
 
-**TODO:** Document deploying to server.
+After running the build step, use following command in project root to deploy the full project to Firebase:
+
+```
+npx firebase deploy
+```
+
+This deploys both the compiled React frontend (from `build/´) and Cloud Functions (from `functions/`). Configuration for the Firebase setup is in `firebase.json` in project root.
+
+(If this is the first deploy from the current machine, you might have to login to Google first using: `npx firebase login`)
