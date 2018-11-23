@@ -125,7 +125,7 @@ class MapView extends Component {
           progress={progressDistance(locations)}
         />
         <a href="/" className="logo">
-          SPUTNIK
+          PUTNIK
         </a>
         <MapFilters
           filters={filters}

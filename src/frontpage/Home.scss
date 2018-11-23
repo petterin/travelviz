@@ -32,3 +32,19 @@
     margin-left: 3vw;
   }
 }
+
+.feedback{
+  position: absolute;
+  bottom: 1vh;
+  right: 2vw;
+  color: whitesmoke;
+  :hover{
+    color: $primary-color;
+  }
+}
+
+form .ant-select, form .ant-cascader-picker {
+
+  width: 90%;
+
+}
