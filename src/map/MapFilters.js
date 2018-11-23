@@ -8,8 +8,7 @@ const ButtonGroup = Button.Group;
 const buttons = [
   'instagram',
   'home',
-  'cloud',
-  'smile'
+  'cloud'
 ]
 
 const MapFilters = props => (

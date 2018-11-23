@@ -41,6 +41,7 @@ const data = locations
 	.map((p, num, arr) => ({
 		elevation: p.elevation,
 		speed: p.speed,
+		temperature: p.airTemperature,
 		sourcePosition: [p.longitude, p.latitude], 
 		targetPosition: arr[num+1] 
 			? [arr[num+1].longitude, arr[num+1].latitude]
@@ -62,6 +63,20 @@ const points = locations
 		// test: (() => console.log(new Date(arr[num + 1].timestamp), new Date(p.timestamp)))()
 	}))
 	.filter(p => p && p.sourcePosition && p.sourcePosition[0] && p.sourcePosition[1] && p.days > 0)
+
+const temps = locations
+	.map((p, num, arr) => ({
+		elevation: p.elevation,
+		speed: p.speed,
+		temperature: p.airTemperature,
+		sourcePosition: [p.longitude, p.latitude],
+		diff: arr[num + 1]
+			? Math.floor(arr[num + 1].airTemperature - p.airTemperature)
+			: 0,
+		// test: (() => console.log(new Date(arr[num + 1].timestamp), new Date(p.timestamp)))()
+	}))
+	.filter(p => p && p.sourcePosition && p.sourcePosition[0] && p.sourcePosition[1] && p.diff > 1)
+
 
 // console.log('points', points)
 
@@ -92,7 +107,10 @@ class Map extends React.Component {
 
 	renderTooltip = () => {
 		const { x, y, hoveredObject } = this.state;
-		const img = hoveredObject && hoveredObject.thumbnail_src ? <img src = { hoveredObject.thumbnail_src } /> : null;
+		const img = hoveredObject && hoveredObject.thumbnail_src ? <img src={hoveredObject.thumbnail_src} /> : null;
+		const desc = hoveredObject && hoveredObject.edge_media_to_caption ? hoveredObject.edge_media_to_caption.edges[0].node.text : ""; 
+		const likes = hoveredObject && hoveredObject.edge_media_preview_like ? hoveredObject.edge_media_preview_like.count : 0;
+		// const rate = likes/100;
 		return (
 			hoveredObject && (
 				// <Card className="tooltip" style={{ left: x, top: y }} hoverable 
@@ -102,8 +120,8 @@ class Map extends React.Component {
 						cover={img} >
 						<Meta
 							title={hoveredObject.days}
-							description="www.instagram.com"/>
-						<Rate />
+							description={desc} />
+						<Rate allowHalf defaultValue={3.5} />
 					</Card>
 				</div>
 			)
@@ -138,6 +156,7 @@ class Map extends React.Component {
 				// onHover: this._onHover	
 			})
 		]
+
 		const homeLayers = [
 			new IconLayer({
 				id: 'layer-pointer',
@@ -173,6 +192,19 @@ class Map extends React.Component {
 				getPixelOffset: () => [6, -24]
 				// onHover: ({ object }) => setTooltip(`${object.name}\n${object.address}`)
 			})]	
+		const tempLayers = [
+			new TextLayer({
+				id: 'layer-temp',
+				data: temps,
+				pickable: true,
+				getPosition: d => d.sourcePosition,
+				getText: d => '' + d.temperature + 'C',
+				getSize: 18,
+				getAngle: 0,
+				getTextAnchor: 'middle',
+				getAlignmentBaseline: 'center'
+			})]	
+	
 		const instaLayers = [
 			new IconLayer({ // insta
 				id: 'layer-insta',
@@ -204,6 +236,10 @@ class Map extends React.Component {
 
 		if (enabledFilters.includes('instagram')) {
 			instaLayers.map(layer => layers.push(layer))
+		}
+
+		if (enabledFilters.includes('cloud')) {
+			tempLayers.map(layer => layers.push(layer))
 		}
 
     return (
