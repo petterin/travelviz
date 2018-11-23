@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Button } from 'antd';
 import ManageUserJourneyModal from "../components/ManageUserJourneyModal";
 
 import "./Settings.scss";

@@ -11,6 +11,7 @@ import 'antd/lib/button/style/css';
 import { withAuthentication } from "./common/Authentication";
 import Firebase, { FirebaseContext } from "./common/Firebase";
 import Home from "./frontpage/Home";
+import About from "./frontpage/About";
 import MapView from "./map/MapView";
 import NotFound from "./error/NotFound";
 import Settings from "./settings/Settings";
@@ -23,6 +24,7 @@ const App = () => (
       <Route path="/" exact component={Home} />
       <Route path ="/settings/" component={Settings} />
       <Route path ="/images/" component={Images} />
+      <Route path = "/about/" component={About} />
       <Route path="/user/:userId" component={MapView} />
       <Route component={NotFound} />
     </Switch>
