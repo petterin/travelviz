@@ -112,7 +112,7 @@ class MapView extends Component {
         <MapTopbar locations={locations} locationsLoading={locationsLoading} xs={0} sm={0} md={0} showModal={this.showModal} />
         <Map state={this.state} ref={this.mapRef} enabledFilters={enabledFilters} />
         <MapProgressLine onChange={this.onCountryChange} distance={calculateTotalDistance(locations)} progress={progressDistance(locations)} />
-        <a href="/" className="logo">SPUTNIK</a>
+        <a href="/" className="logo">PUTNIK</a>
         <MapFilters filters={filters} onFilterChange={this.onFilterChange} onAllFilterChanged={this.onAllFilterChanged} />
         <SignModal
           visible={this.state.modalVisible}
