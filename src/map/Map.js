@@ -1,22 +1,17 @@
 import React from "react";
 import DeckGL, { LineLayer, IconLayer, TextLayer } from 'deck.gl';
 import {StaticMap} from 'react-map-gl';
+import memoize from "memoize-one";
 
 import config from "../common/config.js"
-import garminData from "../data/garmin_locations"
-import { Icon, Card, Rate } from 'antd';
+import { Card, Rate } from 'antd';
 
 import instaData from '../data/insta'
 import "../common/_variables.scss";
 
 const { Meta } = Card;
 
-const locations = garminData
-	.reduce((acc, arr) => acc.concat(arr.slice(0).reverse()), [])
-	.reverse()
-	// .slice(0, 100)
-
-const pics = instaData.map(item => {
+const pics = locations => instaData.map(item => {
 	const ts = item.taken_at_timestamp * 1000
 	let prevLocTs = 0
 	let found = false
@@ -37,7 +32,7 @@ const pics = instaData.map(item => {
 }).filter(item => item && !!item.coords)
 // console.log('instaData', pics)
 
-const data = locations
+const data = locations => locations
 	.map((p, num, arr) => ({
 		elevation: p.elevation,
 		speed: p.speed,
@@ -52,7 +47,7 @@ const data = locations
 	}))
 	.filter(p => p && p.sourcePosition && p.sourcePosition[0] && p.sourcePosition[1] && p.targetPosition[0] && p.targetPosition[1] && p.speed)
 
-const points = locations
+const points = locations => locations
 	.map((p, num, arr) => ({
 		elevation: p.elevation,
 		speed: p.speed,
@@ -64,7 +59,7 @@ const points = locations
 	}))
 	.filter(p => p && p.sourcePosition && p.sourcePosition[0] && p.sourcePosition[1] && p.days > 0)
 
-const temps = locations
+const temps = locations => locations
 	.map((p, num, arr) => ({
 		elevation: p.elevation,
 		speed: p.speed,
@@ -80,14 +75,19 @@ const temps = locations
 
 // console.log('points', points)
 
-config.initialViewState.latitude = garminData[0][0].latitude
-config.initialViewState.longitude = garminData[0][0].longitude
-
 class Map extends React.Component {
-	deckGlRef = React.createRef()
-	mapRef = React.createRef()
+	constructor(props) {
+		super(props);
 
-	state = config.initialViewState
+		this.deckGlRef = React.createRef()
+		this.mapRef = React.createRef()
+
+		this.state = {
+			x: 0,
+			y: 0,
+			hoveredObject: null
+		};
+	}
 
 	_onIconClick = ({ x, y, object }) => {
 		this.setState({ x, y, hoveredObject: object });
@@ -142,14 +142,30 @@ class Map extends React.Component {
 		this.setState({ hoveredObject: null })
 	}
 
+	// If locationProps hasn't changed since the last call (render),
+	// `memoize-one` will reuse the last return value.
+	flatLocations = memoize(locationProps =>
+		locationProps
+			.reduce((acc, arr) => acc.concat(arr.slice(0).reverse()), [])
+			.reverse()
+	);
+
 	render(){
 		const { enabledFilters } = this.props
+		const locations = this.flatLocations(this.props.locations);
+
+		const { initialViewState } = config;
+		if (this.props.locations && this.props.locations[0] && this.props.locations[0][0]) {
+			initialViewState.latitude = this.props.locations[0][0].latitude
+			initialViewState.longitude = this.props.locations[0][0].longitude
+		}
+
 		const layers = [
-      new LineLayer({
-      	id: 'layer-path', 
-      	data,
+			new LineLayer({
+				id: 'layer-path', 
+				data: data(locations),
 				pickable: true,
-    		getStrokeWidth: 3, 
+				getStrokeWidth: 3, 
 				// getColor: d => [100 * Math.sqrt(d.speed), 100, 180, 255],
 				getColor: d => [16 * Math.sqrt(d.elevation), 100, 180, 255],  
 				// onHover: ({ object }) => setTooltip(`${object.day}`)   
@@ -160,7 +176,7 @@ class Map extends React.Component {
 		const homeLayers = [
 			new IconLayer({
 				id: 'layer-pointer',
-				data: points,
+				data: points(locations),
 				iconAtlas: '/assets/pin_night.png', //<Icon type="home" theme="filled" />,
 				pickable: true,
 				iconMapping: {
@@ -181,7 +197,7 @@ class Map extends React.Component {
 			}),
 			new TextLayer({
 				id: 'layer-stops',
-				data: points,
+				data: points(locations),
 				pickable: true,
 				getPosition: d => d.sourcePosition,
 				getText: d => '' + d.days,
@@ -195,7 +211,7 @@ class Map extends React.Component {
 		const tempLayers = [
 			new TextLayer({
 				id: 'layer-temp',
-				data: temps,
+				data: temps(locations),
 				pickable: true,
 				getPosition: d => d.sourcePosition,
 				getText: d => '' + d.temperature + 'C',
@@ -208,7 +224,7 @@ class Map extends React.Component {
 		const instaLayers = [
 			new IconLayer({ // insta
 				id: 'layer-insta',
-				data: pics,
+				data: pics(locations),
 				iconAtlas: '/assets/pin_insta.png',
 				pickable: true,
 				iconMapping: {
@@ -242,24 +258,27 @@ class Map extends React.Component {
 			tempLayers.map(layer => layers.push(layer))
 		}
 
-    return (
-      <DeckGL
+		if (!this.props.locations || this.props.locations.length === 0) {
+			return null;
+		}
+		return (
+			<DeckGL
 				ref={this.deckGlRef}
-				initialViewState={config.initialViewState}
-        controller={true}
+				initialViewState={initialViewState}
+				controller={true}
 				layers={layers}
 				onViewStateChange={this.onViewStateChange}
 				>
 				<StaticMap 
 					ref={this.mapRef}
-        	reuseMaps 
-      		mapboxApiAccessToken={config.mapboxApiAccessToken} 
-        	preventStyleDiffing={true} 
-        	mapStyle="mapbox://styles/mapbox/light-v9" 
-					 />
+					reuseMaps
+					mapboxApiAccessToken={config.mapboxApiAccessToken}
+					preventStyleDiffing={true}
+					mapStyle="mapbox://styles/mapbox/light-v9"
+				/>
 				{this.renderTooltip}
-      </DeckGL>
-    );
+			</DeckGL>
+		);
 	}
 
 }

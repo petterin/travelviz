@@ -49,7 +49,7 @@ class Home extends Component {
           </React.Fragment>
         </FitText>
         <Link
-          to="/user/demo"
+          to="/user/AIyeVqikQTeCsxvS1EogMfasEbq2"
           className="ant-btn ant-btn-background-ghost ant-btn-lg"
         >
           Demo map
