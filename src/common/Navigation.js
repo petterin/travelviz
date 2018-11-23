@@ -33,7 +33,6 @@ const Navigation = ({ showModal, firebase }) => {
   );
 
   const userMenu = (user, firebase) => {
-    console.log("Navigation, user:", user);
     const displayName = user.displayName || user.email;
     return (
       <Menu className="Navigation-Menu">

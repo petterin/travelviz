@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import { withFirebase } from "../common/Firebase";
 import MapTopbar from "./MapTopbar";
 import MapFilters from "./MapFilters";
 import MapProgressLine from "./MapProgressLine";
@@ -44,9 +45,6 @@ class MapView extends Component {
   state = {
     modalKey: null,
     modalVisible: false,
-    lat: 60.1869,
-    lng: 24.8215,
-    zoom: 7,
     locations: [],
     locationsLoading: false,
     filters: { instagram: true }
@@ -60,35 +58,28 @@ class MapView extends Component {
   };
 
   componentDidMount() {
+    const { userId } = this.props.match.params;
+    if (!userId) {
+      console.log("Not fetching data, no userId for MapView.");
+      return;
+    }
+
     this.setState({ locationsLoading: true });
 
-    // Set location data from temporary source:
-    import("../data/garmin_locations")
-      .then(module => {
-        this.setState({ locations: module.default, locationsLoading: false });
-      })
-      .catch(err => {
-        console.log("Could not load mock locations.", err);
-      });
-
-    // (Following is commented out because this version would
-    // consume Firebase's daily free quota very fast!)
-    /*
-    const firebase = initFirebase();
-    const db = initFirestore(firebase);
-
-    db.collection("locations")
+    const { db } = this.props.firebase;
+    db.collection("userLocations")
+      .doc(userId)
+      .collection("locationBatches")
       .get()
       .then(snapshot => {
         const locations = [];
-        snapshot.forEach(doc => locations.push(doc.data()));
+        snapshot.forEach(doc => locations.push(doc.data().locations));        // console.log("fetched userLocations:", locations);
         this.setState({ locations: locations, locationsLoading: false });
       })
       .catch(err => {
         console.log("Error getting documents:", err);
         this.setState({ locationsLoading: false });
       });
-    */
   }
 
   onCountryChange = country => {
@@ -111,8 +102,7 @@ class MapView extends Component {
   };
 
   render() {
-    const { locations, locationsLoading, zoom, filters } = this.state;
-    // const position = [this.state.lat, this.state.lng];
+    const { locations, locationsLoading, filters } = this.state;
     const enabledFilters = Object.keys(filters).filter(key => filters[key]);
     return (
       <div className="MapView">
@@ -125,7 +115,7 @@ class MapView extends Component {
           showModal={this.showModal}
         />
         <Map
-          state={this.state}
+          locations={locations}
           ref={this.mapRef}
           enabledFilters={enabledFilters}
         />
@@ -160,4 +150,4 @@ MapView.propTypes = {
   }).isRequired
 };
 
-export default MapView;
+export default withFirebase(MapView);
