@@ -60,6 +60,7 @@ class Home extends Component {
         <AuthUserContext.Consumer>
           {authUser => (authUser ? <LogoutButton /> : <LoginButton />)}
         </AuthUserContext.Consumer>
+        <a href="mailto:putnikjourney@gmail.com" className="feedback">Give Feedback</a>
         <SignModal
           visible={this.state.visible}
           activeKey={this.state.modalKey}

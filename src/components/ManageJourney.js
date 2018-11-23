@@ -37,10 +37,19 @@ class ManageJourneyFieldSet extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
+
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
       }
+
+      // Should format date value before submit.
+      const rangeValue = fieldsValue['range-picker'];
+      const values = {
+        ...fieldsValue,
+        'range-picker': [rangeValue[0].format('YYYY-MM-DD'), rangeValue[1].format('YYYY-MM-DD')]
+      };
+      console.log('Received values of form: ', values);
     });
   }
 
@@ -49,7 +58,7 @@ class ManageJourneyFieldSet extends React.Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 4 },
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -102,18 +111,19 @@ class ManageJourneyFieldSet extends React.Component {
     });
     return (
       <Form onSubmit={this.handleSubmit}>
+        <h4>Travel time</h4>
         <FormItem
           {...formItemLayout}
-          label="RangePicker"
         >
           {getFieldDecorator('range-picker', rangeConfig)(
             <RangePicker />
           )}
         </FormItem>
+        <h4>Travel countries</h4>
         {formItems}
         <FormItem {...formItemLayoutWithOutLabel}>
-          <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
-            <Icon type="plus" /> Add field
+          <Button type="primary" onClick={this.add} style={{ width: '60%' }}>
+            <Icon type="plus" /> Add country
           </Button>
         </FormItem>
         <FormItem {...formItemLayoutWithOutLabel}>
