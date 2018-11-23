@@ -34,12 +34,13 @@ const Navigation = ({ showModal, firebase }) => {
 
   const userMenu = (user, firebase) => {
     const displayName = user.displayName || user.email;
+    const userUrl = `/user/${user.uid}`;
     return (
       <Menu className="Navigation-Menu">
         <Menu.Item>{displayName}</Menu.Item>
         <Menu.Divider />
         <Menu.Item>
-          <Link to="/user/demo">
+          <Link to={userUrl}>
             <Icon type="home" />
             My Map
           </Link>
