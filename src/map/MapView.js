@@ -45,7 +45,7 @@ class MapView extends Component {
     zoom: 7,
     locations: [],
     locationsLoading: false,
-    filters: {}
+    filters: {"instagram": true}
   };
 
   showModal = key => {

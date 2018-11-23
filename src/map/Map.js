@@ -198,7 +198,7 @@ class Map extends React.Component {
 				data: temps,
 				pickable: true,
 				getPosition: d => d.sourcePosition,
-				getText: d => '' + d.temperature + '°C',
+				getText: d => '' + d.temperature + 'C',
 				getSize: 18,
 				getAngle: 0,
 				getTextAnchor: 'middle',
