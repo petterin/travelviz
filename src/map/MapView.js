@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Spin } from "antd";
 
 import { withFirebase } from "../common/Firebase";
 import MapTopbar from "./MapTopbar";
@@ -73,7 +74,7 @@ class MapView extends Component {
       .get()
       .then(snapshot => {
         const locations = [];
-        snapshot.forEach(doc => locations.push(doc.data().locations));        // console.log("fetched userLocations:", locations);
+        snapshot.forEach(doc => locations.push(doc.data().locations)); // console.log("fetched userLocations:", locations);
         this.setState({ locations: locations, locationsLoading: false });
       })
       .catch(err => {
@@ -104,6 +105,13 @@ class MapView extends Component {
   render() {
     const { locations, locationsLoading, filters } = this.state;
     const enabledFilters = Object.keys(filters).filter(key => filters[key]);
+    const loadingIndicator = locationsLoading ? (
+      <Spin
+        size="large"
+        tip="Loading route..."
+        className="map-loading"
+      />
+    ) : null;
     return (
       <div className="MapView">
         <MapTopbar
@@ -114,6 +122,7 @@ class MapView extends Component {
           md={0}
           showModal={this.showModal}
         />
+        {loadingIndicator}
         <Map
           locations={locations}
           ref={this.mapRef}
