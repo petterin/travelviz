@@ -14,7 +14,7 @@ export default {
 		days: 730,
 		path: {
 			countries: ["Finland", "Estonia", "Latvia", "Lithuania", "Belarus", "Ukraine", "Moldova", "Romania", "Bulgaria", "Turkey", "Georgia", "Azerbaijan", "Kazakhstan", "Uzbekistan", "Kyrgyzstan", "China", "Australia", "New Zealand", "United States", "Portugal", "Spain", "France", "United Kingdom", "Belgium", "Netherlands", "Germany", "Denmark", "Sweden"],
-			done: 6
+			done: 9
 		}
 	}
 }
