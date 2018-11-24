@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, Button, Checkbox, Form, Icon, Input } from 'antd';
+import { Alert, Button, Form, Icon, Input } from 'antd';
 import { withRouter } from 'react-router-dom';
 
 import { withFirebase } from '../common/Firebase';
@@ -30,10 +30,11 @@ class SignInForm extends Component {
         const { userName, password } = values;
         this.props.firebase
           .doSignInWithEmailAndPassword(userName, password)
-          .then(() => {
+          .then(auth => {
             this.setState({ ...INITIAL_STATE });
             this.props.form.resetFields();
             this.props.closeFn();
+            this.props.history.push(`/user/${auth.user.uid}`);
           })
           .catch(error => {
             this.setState({ error });
@@ -45,7 +46,7 @@ class SignInForm extends Component {
   render() {
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
 
-    const generalError = this.state.error ? <Alert message={this.state.error.message} type="error" showIcon /> : null;
+    const generalError = this.state.error ? <Alert message={this.state.error.message} type="error" showIcon /> : "Welcome back!";
     // Only show error after a field is touched.
     const userNameError = isFieldTouched('userName') && getFieldError('userName');
     const passwordError = isFieldTouched('password') && getFieldError('password');
@@ -68,14 +69,6 @@ class SignInForm extends Component {
             rules: [{ required: true, message: 'Please input your Password!' }],
           })(
             <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
-          )}
-        </FormItem>
-        <FormItem>
-          {getFieldDecorator('remember', {
-            valuePropName: 'checked',
-            initialValue: true,
-          })(
-            <Checkbox>Remember me</Checkbox>
           )}
         </FormItem>
         <FormItem>

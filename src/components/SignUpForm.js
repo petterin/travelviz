@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button } from 'antd';
 const FormItem = Form.Item;
 
 function hasErrors(fieldsError) {
@@ -16,6 +16,9 @@ class SignIUpForm extends Component {
     const passwordError = isFieldTouched('password') && getFieldError('password');
     return (
       <Form layout="horizontal" className="login-form">
+        <FormItem>
+          Registration is not yet in use...<br />Please check back later!
+        </FormItem>
         <FormItem
           validateStatus={userNameError ? 'error' : ''}
           help={userNameError || ''}>
