@@ -33,6 +33,7 @@ class ManageUserJourneyModal extends Component {
             )}
           </AuthUserContext.Consumer>
         </p>
+        <p>The settings do not yet affect the map, sorry about that!</p>
         <Tabs defaultActiveKey="1" onChange={onTabChange}>
           <TabPane tab={<span><Icon type="api" />Journey Settings</span>} key="1">
             <ManageJourney />
