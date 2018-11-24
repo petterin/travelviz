@@ -107,7 +107,7 @@ class Map extends React.Component {
 
 	renderTooltip = () => {
 		const { x, y, hoveredObject } = this.state;
-		const img = hoveredObject && hoveredObject.thumbnail_src ? <img src={hoveredObject.thumbnail_src} /> : null;
+		const img = hoveredObject && hoveredObject.display_url ? <img src={hoveredObject.display_url} /> : null;
 		const desc = hoveredObject && hoveredObject.edge_media_to_caption ? hoveredObject.edge_media_to_caption.edges[0].node.text : ""; 
 		const likes = hoveredObject && hoveredObject.edge_media_preview_like ? hoveredObject.edge_media_preview_like.count : 0;
 		// const rate = likes/100;

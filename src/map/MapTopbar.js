@@ -110,7 +110,7 @@ const MapTopbar = props => (
       Top speed: {calculateTopSpeed(props.locations)} km/h
     </Col>
     <Col xs={0} sm={5} md={4} lg={4} xl={3}>
-      <Progress type="dashboard" percent={progressDays(props.locations)} width={28} />{calculateActivityDays(props.locations)} / {calculateTourDays(props.locations)} days
+      <Progress type="dashboard" percent={progressDays(props.locations)} width={28} />{calculateTourDays(props.locations)} / {config.tour.days} days
     </Col>
     <Col xs={0} sm={0} md={6} lg={7} xl={12}></Col>
     <Col xs={10} sm={4} md={2} lg={2} xl={1} className="right">

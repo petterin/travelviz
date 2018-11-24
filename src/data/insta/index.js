@@ -4,6 +4,7 @@ const getItems = blob =>
   blob.data.user.edge_owner_to_timeline_media.edges
 
 const data = [
+  require('./08.json'),
   require('./07.json'),
   require('./06.json'),
   require('./05.json'),
