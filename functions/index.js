@@ -3,6 +3,8 @@ const cors = require("cors");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 
+const garminHelper = require("./garminHelper");
+
 // --- Root of the project's Cloud Functions ---
 
 admin.initializeApp();
@@ -45,18 +47,23 @@ app.post("/userLocations/:userId/garmin", (req, res) => {
     return res.status(415).json({ error: "Content type must be JSON." });
   }
   const userId = req.params.userId;
-  const body = req.body;
-  // TODO: Convert from Garmin format to our format
-  const timestamp = new Date().toISOString(); // TODO: Get timestamp from oldest/newest location in body
+  const convertedLocations = garminHelper.convertGarminData(req.body);
+  const locationCount = convertedLocations.locations.length;
+  if (locationCount < 1) {
+    return res
+      .status(400)
+      .json({ error: "Could not find valid locations in body." });
+  }
+  const batchId = convertedLocations.locations[0].timestamp;
   return firestore
     .collection("userLocations")
     .doc(userId)
     .collection("locationBatches")
-    .doc(timestamp)
-    .set(body)
+    .doc(batchId)
+    .set(convertedLocations)
     .then(writeResult => {
       return res.json({
-        result: `Location batch with timestamp ${timestamp} added.`
+        result: `Location batch of ${locationCount} items added with timestamp ${batchId}.`
       });
     })
     .catch(err => {

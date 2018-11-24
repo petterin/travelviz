@@ -45,6 +45,8 @@ Launches the test runner in the interactive watch mode in terminal.
 
 ### Running API in development mode
 
+*(Not required for the basic functionality of the service.)*
+
 **First time:**
 
 Run `npx firebase login` in project root, and login using the provided URL and your own Google account (which should be associated to the Firebase project).
@@ -80,3 +82,19 @@ npx firebase deploy
 This deploys both the compiled React frontend (from `build/´) and Cloud Functions (from `functions/`). Configuration for the Firebase setup is in `firebase.json` in project root.
 
 (If this is the first deploy from the current machine, you might have to login to Google first using: `npx firebase login`)
+
+
+# API reference (Cloud Functions)
+
+NOTE: Locally the URLs are `http://localhost:5000/tourdeteemu/us-central1/...` and in production `https://us-central1-tourdeteemu.cloudfunctions.net/...`.
+
+## `POST api/userLocations/:userId/garmin`
+
+Convert and store a Garmin-formatted activity for a user.
+
+**Parameters and body:**
+
+* `:userId`: User's UID (used in Firebase Authentication)
+* Body: Garmin Activity JSON (remember to set also set header `Content-Type: application/json`)
+
+HINT: You can find the activity JSON from: `https://connect.garmin.com/modern/proxy/activity-service/activity/<ACTIVITY_ID>/details?maxChartSize=2000&maxPolylineSize=4000`
