@@ -148,14 +148,13 @@ class Map extends React.Component {
 	// `memoize-one` will reuse the last return value.
 	flatLocations = memoize(locationProps =>
 		locationProps
-			.reduce((acc, arr) => acc.concat(arr.slice(0).reverse()), [])
-			.reverse()
+			.reduce((acc, arr) => acc.concat(arr.slice(0)), [])
+			.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
 	);
 
 	render(){
 		const { enabledFilters } = this.props
 		const locations = this.flatLocations(this.props.locations);
-
 		const { initialViewState } = config;
 		if (this.props.locations && this.props.locations[0] && this.props.locations[0][0]) {
 			initialViewState.latitude = this.props.locations[0][0].latitude
