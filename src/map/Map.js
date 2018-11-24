@@ -11,7 +11,7 @@ import "../common/_variables.scss";
 
 const { Meta } = Card;
 
-const pics = locations => instaData.map(item => {
+const pics = memoize(locations => instaData.map(item => {
 	const ts = item.taken_at_timestamp * 1000
 	let prevLocTs = 0
 	let found = false
@@ -29,10 +29,10 @@ const pics = locations => instaData.map(item => {
 	})
 	item.coords = coords[0]
 	return item
-}).filter(item => item && !!item.coords)
+}).filter(item => item && !!item.coords))
 // console.log('instaData', pics)
 
-const data = locations => locations
+const data = memoize(locations => locations
 	.map((p, num, arr) => ({
 		elevation: p.elevation,
 		speed: p.speed,
@@ -46,8 +46,9 @@ const data = locations => locations
 			: 0
 	}))
 	.filter(p => p && p.sourcePosition && p.sourcePosition[0] && p.sourcePosition[1] && p.targetPosition[0] && p.targetPosition[1] && p.speed)
+);
 
-const points = locations => locations
+const points = memoize(locations => locations
 	.map((p, num, arr) => ({
 		elevation: p.elevation,
 		speed: p.speed,
@@ -58,8 +59,9 @@ const points = locations => locations
 		// test: (() => console.log(new Date(arr[num + 1].timestamp), new Date(p.timestamp)))()
 	}))
 	.filter(p => p && p.sourcePosition && p.sourcePosition[0] && p.sourcePosition[1] && p.days > 0)
+)
 
-const temps = locations => locations
+const temps = memoize(locations => locations
 	.map((p, num, arr) => ({
 		elevation: p.elevation,
 		speed: p.speed,
@@ -71,7 +73,7 @@ const temps = locations => locations
 		// test: (() => console.log(new Date(arr[num + 1].timestamp), new Date(p.timestamp)))()
 	}))
 	.filter(p => p && p.sourcePosition && p.sourcePosition[0] && p.sourcePosition[1] && p.diff > 1)
-
+)
 
 // console.log('points', points)
 
